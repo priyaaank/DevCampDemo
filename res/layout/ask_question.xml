@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+ 
+ 	<TextView	android:id="@+id/ask_question_heading"
+ 				android:layout_width="fill_parent"
+ 				android:layout_height="wrap_content"
+ 				android:textSize="20sp"
+ 				android:gravity="center_horizontal"
+ 				android:paddingBottom="20dip"
+ 				android:paddingTop="10dip"
+ 				android:textStyle="bold"
+ 				android:text="Ask a question!"/>
+	<EditText	android:id="@+id/ask_question_box"
+			  	android:layout_width="fill_parent"
+			  	android:layout_height="140dip"/>
+			  	
+	<ImageView  android:id="@+id/image_view"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				/>
+				
+	<LinearLayout	android:id="@+id/ask_question_button_wrapper"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:orientation="vertical"
+					android:gravity="center_horizontal">
+		<Button	android:id="@+id/ask_question_submit_button"
+				android:text="Ask!"
+				android:layout_height="wrap_content"
+				android:layout_width="200dip"/>					
+		<Button	android:id="@+id/ask_question_map"
+				android:text="Map!"
+				android:layout_height="wrap_content"
+				android:layout_width="200dip"/>			
+	</LinearLayout>
+</LinearLayout>
