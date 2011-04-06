@@ -29,6 +29,7 @@ public class QuestionTable {
 
 		public static final String ID_QUERY = "Select * from questions where id = ? ";
 		public static final String ALL_QUERY_WITHOUT_LOCATION = "Select * from questions where latitude is null or longitude is null ";
+		public static final String ALL_QUERY_WITH_LOCATION = "Select * from questions where latitude is not null or longitude is not null ";
 
 		public QuestionCursor(SQLiteDatabase db, SQLiteCursorDriver driver, String editTable, SQLiteQuery query) {
 			super(db, driver, editTable, query);
@@ -70,6 +71,10 @@ public class QuestionTable {
 		return findQuestions(QuestionCursor.ALL_QUERY_WITHOUT_LOCATION, null);
 	}
 
+	public List<Question> findAllWithLocation() {
+		return findQuestions(QuestionCursor.ALL_QUERY_WITH_LOCATION, null);
+	}
+	
 	public Question findById(long id) {
 		String id_string = Long.toString(id);
 		List<Question> questionList = findQuestions(QuestionCursor.ID_QUERY, new String[] {id_string});

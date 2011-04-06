@@ -45,6 +45,8 @@ public class NewQuestion extends Activity {
 						startService(new Intent(getApplicationContext(), QuestionUploadService.class));
 					}
 				}).start();
+				
+				finish();
 			}
 		});
 	}

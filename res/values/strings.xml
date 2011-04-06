@@ -2,4 +2,6 @@
 <resources>
     <string name="hello">Hello World, Listing!</string>
     <string name="app_name">PuneDemo</string>
+    <string name="no_questions">No Questions have been added as yet!</string>
+    <string name="quit">Quit</string>
 </resources>
