@@ -1,4 +1,4 @@
-package com.test.punedemo.db;
+package com.test.devcampdemo.db;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQuery;
 import android.util.Log;
 
-import com.test.punedemo.models.Question;
+import com.test.devcampdemo.models.Question;
 
 public class QuestionTable {
 	
@@ -28,7 +28,7 @@ public class QuestionTable {
 	private static class QuestionCursor extends SQLiteCursor {
 
 		public static final String ID_QUERY = "Select * from questions where id = ? ";
-		public static final String ALL_QUERY = "Select * from questions ";
+		public static final String ALL_QUERY_WITHOUT_LOCATION = "Select * from questions where latitude is null or longitude is null ";
 
 		public QuestionCursor(SQLiteDatabase db, SQLiteCursorDriver driver, String editTable, SQLiteQuery query) {
 			super(db, driver, editTable, query);
@@ -52,14 +52,22 @@ public class QuestionTable {
 		private long getId() {
 			return getLong(getColumnIndexOrThrow("id"));
 		}
+
+		private String getLatitude() {
+			return getString(getColumnIndexOrThrow("latitude"));
+		}
+		
+		private String getLongitude() {
+			return getString(getColumnIndexOrThrow("longitude"));
+		}
 		
 		public Question getQuestion() {
-			return new Question(getId(), getQuestionText(), getQuestionTitle());
+			return new Question(getId(), getQuestionText(), getQuestionTitle(), getLatitude(), getLongitude());
 		}
 	}
 	
-	public List<Question> findAll() {
-		return findQuestions(QuestionCursor.ALL_QUERY, null);
+	public List<Question> findAllWithoutLocation() {
+		return findQuestions(QuestionCursor.ALL_QUERY_WITHOUT_LOCATION, null);
 	}
 
 	public Question findById(long id) {
@@ -76,6 +84,8 @@ public class QuestionTable {
 				ContentValues dbValues = new ContentValues();
 				dbValues.put("text", newQuestion.getText());
 				dbValues.put("title", newQuestion.getTitle());
+				dbValues.put("latitude", newQuestion.getLatitude());
+				dbValues.put("longitude", newQuestion.getLongitude());
 				long id = puneDemoDatabase.getWritableDatabase().insertOrThrow(TABLE_NAME, "text", dbValues);
 				newQuestion.setId(id);
 				puneDemoDatabase.getWritableDatabase().setTransactionSuccessful();
@@ -107,5 +117,29 @@ public class QuestionTable {
 			}
 		}
 		return questionList;
+	}
+
+	public void updateQuestion(Question eachQuestion) {
+		if (eachQuestion != null) {
+			long id = eachQuestion.getId();
+			Log.i("QuestionsTable", "Updating records for question with id :"+ id);
+			Log.i("QuestionsTable", "Updating records for question with id :"+ eachQuestion.getLongitude() + "         " + eachQuestion.getLatitude());
+			ContentValues valuesToUpdate = new ContentValues();
+			if(id > 0) {
+				puneDemoDatabase.getWritableDatabase().beginTransaction();
+				try {
+					valuesToUpdate.put("title", eachQuestion.getTitle());
+					valuesToUpdate.put("text", eachQuestion.getText());
+					valuesToUpdate.put("longitude", eachQuestion.getLongitude());
+					valuesToUpdate.put("latitude", eachQuestion.getLatitude());
+					puneDemoDatabase.getWritableDatabase().update(TABLE_NAME, valuesToUpdate, " ID = ?", new String[]{Long.toString(id)});
+					puneDemoDatabase.getWritableDatabase().setTransactionSuccessful();
+				} catch (SQLException sqle) {
+					Log.e("Pending Reviews Table", "Error while updating the field for the table. Error is :" + sqle.getMessage());
+				} finally {
+					puneDemoDatabase.getWritableDatabase().endTransaction();
+				}
+			}
+		}
 	}
 }

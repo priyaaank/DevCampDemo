@@ -1,0 +1,11 @@
+bin/
+gen/com/test/devcampdemo/R.java
+.project
+.classpath
+.DS_Store
+*.swp
+*.sqlite
+.settings/
+*/**/tags
+*.db
+tmp

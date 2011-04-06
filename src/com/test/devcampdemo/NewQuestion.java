@@ -1,18 +1,17 @@
-package com.test.punedemo;
+package com.test.devcampdemo;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 
-import com.test.punedemo.db.PuneDemoDatabase;
-import com.test.punedemo.db.QuestionTable;
-import com.test.punedemo.models.Question;
-import com.test.punedemo.services.QuestionUploadService;
+import com.test.devcampdemo.db.PuneDemoDatabase;
+import com.test.devcampdemo.db.QuestionTable;
+import com.test.devcampdemo.models.Question;
+import com.test.devcampdemo.services.QuestionUploadService;
 
 public class NewQuestion extends Activity {
     protected static final int GET_LOCATION = 1;
@@ -23,7 +22,7 @@ public class NewQuestion extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ask_question);
-        database = new PuneDemoDatabase(this);
+        database = new PuneDemoDatabase(getApplicationContext());
         setComponentListeners();
     }
     
@@ -41,19 +40,11 @@ public class NewQuestion extends Activity {
 				(new Thread() {
 					public void run() {
 						String questionText = ((EditText)NewQuestion.this.findViewById(R.id.ask_question_box)).getText().toString();
-						new QuestionTable(database).create(new Question(-1, questionText, questionText));
-						QuestionUploadService.acquireStaticLock(NewQuestion.this);
-						startService(new Intent(NewQuestion.this, QuestionUploadService.class));
+						new QuestionTable(database).create(new Question(-1, questionText, questionText, null, null));
+						QuestionUploadService.acquireStaticLock(getApplicationContext());
+						startService(new Intent(getApplicationContext(), QuestionUploadService.class));
 					}
 				}).start();
-			}
-		});
-		
-		findViewById(R.id.ask_question_map).setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				String uri = "geo:"+ 0 + "," + 0 + "?q=thoughtworks+pune+yerwada";
-				startActivityForResult(new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri)), GET_LOCATION);
 			}
 		});
 	}

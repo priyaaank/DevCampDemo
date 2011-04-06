@@ -31,10 +31,6 @@
 		<Button	android:id="@+id/ask_question_submit_button"
 				android:text="Ask!"
 				android:layout_height="wrap_content"
-				android:layout_width="200dip"/>					
-		<Button	android:id="@+id/ask_question_map"
-				android:text="Map!"
-				android:layout_height="wrap_content"
-				android:layout_width="200dip"/>			
+				android:layout_width="200dip"/>							
 	</LinearLayout>
 </LinearLayout>

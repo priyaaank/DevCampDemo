@@ -1,4 +1,4 @@
-package com.test.punedemo.db;
+package com.test.devcampdemo.db;
 
 import android.content.Context;
 import android.database.SQLException;
@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.test.punedemo.R;
+import com.test.devcampdemo.R;
 
 public class PuneDemoDatabase extends SQLiteOpenHelper {
 

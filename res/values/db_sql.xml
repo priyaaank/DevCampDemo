@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="sqls">
-    Create table questions (id integer primary key, text text, title varchar(255));
+    Create table questions (id integer primary key, text text, title varchar(255), latitude varchar(20), longitude varchar(20));
     </string>
 </resources>
