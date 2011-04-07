@@ -25,6 +25,9 @@ public class QuestionUploadService extends WakeEventService {
 		database = new PuneDemoDatabase(getApplicationContext());
 	}
 	
+	/**
+	 * Ensure that database instance is closed when we destroy the service, as a hanging connection will create problem, if accessed later on.
+	 */
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
@@ -32,6 +35,15 @@ public class QuestionUploadService extends WakeEventService {
 			database.close();
 	}
 	
+	
+	/**
+	 * This is one of the lifecycle methods on service. It is called as many times, as invocation to service is done. A repeated invocation to service does not nest
+	 * if it is already running. However onStartCommand is called, each time. The method returned from this method decides; how service is handled if it is killed
+	 * by android, under memory pressure. START_STICKY will ensure, that service is restarted if it is killed mid-way; however the intent is not re-delivered.
+	 *  
+	 * In our case we do not have any data in intent that needs to be used, so we have chosed not to have intent re-delivered. 
+	 *  
+	 */
 	@Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(LOG_TAG, "Received start id " + startId + ": " + intent);
@@ -66,6 +78,7 @@ public class QuestionUploadService extends WakeEventService {
 		}
 	}
 
+	//When connection is bound to service, binder object is used to interface with service. It is not currently needed.
 	@Override
 	public IBinder onBind(Intent arg0) {
 		return null;

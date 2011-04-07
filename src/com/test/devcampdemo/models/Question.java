@@ -56,20 +56,4 @@ public class Question {
 	public void setLongitude(String longitude) {
 		this.longitude = longitude;
 	}
-	
-	public int getMicroLatitudes() {
-		if(null != this.getLatitude()) {
-			Double value = Double.parseDouble(this.getLatitude()) * 10E5;
-			return value.intValue();
-		}
-		return 0;
-	}
-	
-	public int getMicroLongitudes() {
-		if(null != this.getLongitude()) {
-			Double value = Double.parseDouble(this.getLongitude()) * 10E5;
-			return value.intValue();
-		}
-		return 0;
-	}
 }
