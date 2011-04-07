@@ -25,6 +25,9 @@ public class QuestionTable {
 		this.puneDemoDatabase = database;
 	}
 	
+	//A cursor is a nice wrapper to the data structure that carries data from database to program.
+	//There are better implementations for an object cursor, however for a simplistic view, I have
+	//gone ahead with a private class and a rudimentary implementation.
 	private static class QuestionCursor extends SQLiteCursor {
 
 		public static final String ID_QUERY = "Select * from questions where id = ? ";
@@ -34,7 +37,8 @@ public class QuestionTable {
 		public QuestionCursor(SQLiteDatabase db, SQLiteCursorDriver driver, String editTable, SQLiteQuery query) {
 			super(db, driver, editTable, query);
 		}
-		
+
+		//Factory used by android to obtain an instance of the cursor object. This is needed.
 		private static class Factory implements SQLiteDatabase.CursorFactory {
 			@Override
 			public Cursor newCursor(SQLiteDatabase db, SQLiteCursorDriver driver, String editTable, SQLiteQuery query) {
@@ -62,6 +66,7 @@ public class QuestionTable {
 			return getString(getColumnIndexOrThrow("longitude"));
 		}
 		
+		//This is the method, that returns a populated object
 		public Question getQuestion() {
 			return new Question(getId(), getQuestionText(), getQuestionTitle(), getLatitude(), getLongitude());
 		}
@@ -84,6 +89,7 @@ public class QuestionTable {
 	public Question create(Question newQuestion) {
 		if (newQuestion != null) {
 			
+			//Writes to database can be made transactional as in this example.
 			puneDemoDatabase.getWritableDatabase().beginTransaction();
 			try {
 				ContentValues dbValues = new ContentValues();
@@ -91,6 +97,10 @@ public class QuestionTable {
 				dbValues.put("title", newQuestion.getTitle());
 				dbValues.put("latitude", newQuestion.getLatitude());
 				dbValues.put("longitude", newQuestion.getLongitude());
+				
+				//The second parameter supplied in insertOrThrow method is to cover for null hack, where no fields/values
+				//are supplied to be inserted in database. It's a field name, which android can substitue in that case to
+				//be null explicitly. So that eventually it will be able to say, "insert into questions (text) values (null)"
 				long id = puneDemoDatabase.getWritableDatabase().insertOrThrow(TABLE_NAME, "text", dbValues);
 				newQuestion.setId(id);
 				puneDemoDatabase.getWritableDatabase().setTransactionSuccessful();
@@ -137,10 +147,11 @@ public class QuestionTable {
 					valuesToUpdate.put("text", eachQuestion.getText());
 					valuesToUpdate.put("longitude", eachQuestion.getLongitude());
 					valuesToUpdate.put("latitude", eachQuestion.getLatitude());
+					//Use ? parameterized sql queries, else you'll be exposed to sql injection here, if you make direct string substitution
 					puneDemoDatabase.getWritableDatabase().update(TABLE_NAME, valuesToUpdate, " ID = ?", new String[]{Long.toString(id)});
 					puneDemoDatabase.getWritableDatabase().setTransactionSuccessful();
 				} catch (SQLException sqle) {
-					Log.e("Pending Reviews Table", "Error while updating the field for the table. Error is :" + sqle.getMessage());
+					Log.e("Question Table", "Error while updating the field for the table. Error is :" + sqle.getMessage());
 				} finally {
 					puneDemoDatabase.getWritableDatabase().endTransaction();
 				}

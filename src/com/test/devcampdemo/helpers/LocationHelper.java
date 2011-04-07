@@ -15,6 +15,7 @@ public class LocationHelper {
 		this.locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 	}
 	
+	//Choose best of the stale locations that we have. (from gps and network)
 	public Location getBestLastKnownLocation() {
 		Location networkLocation =null, gpsLocation =null;
         if(isGPSSupported())

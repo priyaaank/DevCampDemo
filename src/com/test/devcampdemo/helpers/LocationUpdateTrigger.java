@@ -71,6 +71,7 @@ public class LocationUpdateTrigger {
 		}
 	};	
 	
+	//These run in a separate thread. They have an ability to be scheduled for execution.
 	private TimerTask lastKnowLocationTimerTask = new TimerTask() {
 		@Override
 		public void run() {
@@ -94,6 +95,9 @@ public class LocationUpdateTrigger {
 		networkSupported = locationHelper.isNetworkSupported();
 
 		//We have no way to query the locations as nothing is supported
+		//In this case a location may not be provided for the question; and ideal user experience would be to show a popup
+		//asking him to enable either of those two. But if thats not done, then we'll have stale data in our app and usually
+		//we'd want to clean that periodically.
 		if(!networkSupported && !gpsSupported)
 		{
 			Log.i("Location Update", "No location information available!");
@@ -113,6 +117,7 @@ public class LocationUpdateTrigger {
 		new Timer().schedule(lastKnowLocationTimerTask, timetoWaitForRealTimeUpdate);
 	}
 
+	//This is the implementation that caller will provide, so that it can be called, once we have location available.
 	public static abstract class LocationResultExecutor {
 		public abstract void executeWithUpdatedLocation(Location location);
 	}
