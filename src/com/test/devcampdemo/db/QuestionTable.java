@@ -139,8 +139,8 @@ public class QuestionTable {
 			long id = eachQuestion.getId();
 			Log.i("QuestionsTable", "Updating records for question with id :"+ id);
 			Log.i("QuestionsTable", "Updating records for question with id :"+ eachQuestion.getLongitude() + "         " + eachQuestion.getLatitude());
-			ContentValues valuesToUpdate = new ContentValues();
 			if(id > 0) {
+				ContentValues valuesToUpdate = new ContentValues();
 				puneDemoDatabase.getWritableDatabase().beginTransaction();
 				try {
 					valuesToUpdate.put("title", eachQuestion.getTitle());
