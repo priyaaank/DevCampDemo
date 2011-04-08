@@ -14,6 +14,7 @@
  				android:paddingTop="10dip"
  				android:textStyle="bold"
  				android:text="Ask a question!"/>
+ 				
 	<EditText	android:id="@+id/ask_question_box"
 			  	android:layout_width="fill_parent"
 			  	android:layout_height="140dip"/>

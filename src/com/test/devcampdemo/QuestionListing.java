@@ -3,10 +3,7 @@ package com.test.devcampdemo;
 import java.util.List;
 
 import android.app.ListActivity;
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -94,8 +91,7 @@ public class QuestionListing extends ListActivity {
 			//two possible apps. Similar to what happens when you have two browsers installed and you click on a link.
 			//This feature is powerful, as you can expose your intents too and do something with a given data and action. This is declared in
 			//Android manifest file.
-			String uri = "geo:"+ questions.get(position).getLatitude() +","+ questions.get(position).getLongitude() +"?z=15";
-			startActivity(new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri)));
+			//TODO - Call the map intent with geo cordinates and zoom level
 		}
 	}
 
@@ -136,34 +132,12 @@ public class QuestionListing extends ListActivity {
 		});
 	}
 	
-	
-	//Implementation of Async Task.
-	//The generics defined with class decide the return or params type for methods in this class.
-	private class QuestionsFetchAsyncTask extends AsyncTask<Void, Void, List<Question>> {
-		private final ProgressDialog dialog = new ProgressDialog(QuestionListing.this);
-
-		//Runs on UI thread.
-		@Override
-		protected void onPreExecute() {
-			this.dialog.setMessage("Fetching...");
-			this.dialog.show();
-		}
+	//TODO - Remove this placeholder class and implement a AsyncTaskClass
+	//TODO - Show progress on UI while the fetch is done from database
+	private class QuestionsFetchAsyncTask {
 		
-		//Runs on non-UI thread and this is where all the blocking operations should be done.
-		@Override
-		protected List<Question> doInBackground(Void... params) {
-			return QuestionListing.this.populateReviewList();
-		}
+		public void execute() {
 			
-		//Runs on UI thread
-		@Override
-		protected void onPostExecute(List<Question> result) {
-			
-			QuestionListing.this.updateListingContentsWith(result);
-
-			if (this.dialog.isShowing()) {
-				this.dialog.dismiss();
-			}
 		}
 	}
 }

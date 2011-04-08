@@ -1,6 +1,5 @@
 package com.test.devcampdemo.db;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -114,48 +113,12 @@ public class QuestionTable {
 	}
 	
 	protected List<Question> findQuestions(String query, String[] params) {
-		Cursor questionCursor = null;
-		List<Question> questionList = new ArrayList<Question>();
-		try {
-			questionCursor = puneDemoDatabase.getReadableDatabase().rawQueryWithFactory(new QuestionCursor.Factory(), query, params, null);
-			if(questionCursor != null && questionCursor.moveToFirst()) {
-				do {
-					questionList.add(((QuestionCursor)questionCursor).getQuestion());
-				} while(questionCursor.moveToNext());
-			}
-		} catch(SQLException sqle) {
-			Log.e(LOG_TAG, "Could not look up the reviews with params "+ params +". The error is: "+ sqle.getMessage());
-		}
-		finally {
-			if(questionCursor != null && !questionCursor.isClosed()) {
-				questionCursor.close();
-			}
-		}
-		return questionList;
+		//TODO - Do a find operations for all the questions in database
+		//TODO - Close the cursor before we return the data.
+		return null;
 	}
 
 	public void updateQuestion(Question eachQuestion) {
-		if (eachQuestion != null) {
-			long id = eachQuestion.getId();
-			Log.i("QuestionsTable", "Updating records for question with id :"+ id);
-			Log.i("QuestionsTable", "Updating records for question with id :"+ eachQuestion.getLongitude() + "         " + eachQuestion.getLatitude());
-			if(id > 0) {
-				ContentValues valuesToUpdate = new ContentValues();
-				puneDemoDatabase.getWritableDatabase().beginTransaction();
-				try {
-					valuesToUpdate.put("title", eachQuestion.getTitle());
-					valuesToUpdate.put("text", eachQuestion.getText());
-					valuesToUpdate.put("longitude", eachQuestion.getLongitude());
-					valuesToUpdate.put("latitude", eachQuestion.getLatitude());
-					//Use ? parameterized sql queries, else you'll be exposed to sql injection here, if you make direct string substitution
-					puneDemoDatabase.getWritableDatabase().update(TABLE_NAME, valuesToUpdate, " ID = ?", new String[]{Long.toString(id)});
-					puneDemoDatabase.getWritableDatabase().setTransactionSuccessful();
-				} catch (SQLException sqle) {
-					Log.e("Question Table", "Error while updating the field for the table. Error is :" + sqle.getMessage());
-				} finally {
-					puneDemoDatabase.getWritableDatabase().endTransaction();
-				}
-			}
-		}
+		//TODO - Do update operations for question.
 	}
 }
